@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import React, { Fragment, ReactNode } from 'react';
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import classNames from 'classnames';
-import { X } from '@phosphor-icons/react';
+import React, { Fragment, ReactNode } from "react";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
+import classNames from "classnames";
+import { X } from "@phosphor-icons/react";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -11,7 +17,7 @@ export interface ModalProps {
   title?: string;
   description?: string;
   children: ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   showCloseButton?: boolean;
   className?: string;
 }
@@ -22,16 +28,16 @@ const Modal: React.FC<ModalProps> = ({
   title,
   description,
   children,
-  size = 'md',
+  size = "md",
   showCloseButton = true,
   className,
 }) => {
   const sizes = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-xl',
-    full: 'max-w-4xl',
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    full: "max-w-4xl",
   };
 
   return (
@@ -62,7 +68,7 @@ const Modal: React.FC<ModalProps> = ({
             >
               <DialogPanel
                 className={classNames(
-                  'w-full transform overflow-hidden rounded-2xl bg-surface-900 border border-surface-700 p-6 text-left align-middle shadow-xl transition-all',
+                  "w-full transform overflow-hidden rounded-2xl bg-surface-900 border border-surface-700 p-6 text-left align-middle shadow-xl transition-all",
                   sizes[size],
                   className
                 )}
@@ -106,5 +112,3 @@ const Modal: React.FC<ModalProps> = ({
 };
 
 export default Modal;
-
-

@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import React, { Fragment } from 'react';
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
-import classNames from 'classnames';
-import { CaretDown, Check } from '@phosphor-icons/react';
+import React, { Fragment } from "react";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react";
+import classNames from "classnames";
+import { CaretDown, Check } from "@phosphor-icons/react";
 
 export interface SelectOption {
   value: string;
@@ -27,7 +33,7 @@ const Select: React.FC<SelectProps> = ({
   value,
   onChange,
   options,
-  placeholder = 'Select an option',
+  placeholder = "Select an option",
   error,
   disabled = false,
   className,
@@ -35,7 +41,7 @@ const Select: React.FC<SelectProps> = ({
   const selectedOption = options.find((opt) => opt.value === value);
 
   return (
-    <div className={classNames('w-full', className)}>
+    <div className={classNames("w-full", className)}>
       {label && (
         <label className="block text-sm font-medium text-surface-300 mb-1.5">
           {label}
@@ -45,18 +51,18 @@ const Select: React.FC<SelectProps> = ({
         <div className="relative">
           <ListboxButton
             className={classNames(
-              'relative w-full px-4 py-3 bg-surface-900/50 border rounded-xl text-left transition-all duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-offset-0',
+              "relative w-full px-4 py-3 bg-surface-900/50 border rounded-xl text-left transition-all duration-200",
+              "focus:outline-none focus:ring-2 focus:ring-offset-0",
               error
-                ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
-                : 'border-surface-700 focus:border-primary-500 focus:ring-primary-500/20',
-              disabled && 'opacity-50 cursor-not-allowed'
+                ? "border-danger-500 focus:border-danger-500 focus:ring-danger-500/20"
+                : "border-surface-700 focus:border-primary-500 focus:ring-primary-500/20",
+              disabled && "opacity-50 cursor-not-allowed"
             )}
           >
             <span
               className={classNames(
-                'block truncate',
-                selectedOption ? 'text-surface-100' : 'text-surface-500'
+                "block truncate",
+                selectedOption ? "text-surface-100" : "text-surface-500"
               )}
             >
               {selectedOption?.label || placeholder}
@@ -79,11 +85,11 @@ const Select: React.FC<SelectProps> = ({
                   disabled={option.disabled}
                   className={({ active, selected }) =>
                     classNames(
-                      'relative cursor-pointer select-none py-2.5 pl-10 pr-4 transition-colors',
-                      active && 'bg-surface-700',
-                      selected && 'text-primary-400',
-                      !selected && !active && 'text-surface-200',
-                      option.disabled && 'opacity-50 cursor-not-allowed'
+                      "relative cursor-pointer select-none py-2.5 pl-10 pr-4 transition-colors",
+                      active && "bg-surface-700",
+                      selected && "text-primary-400",
+                      !selected && !active && "text-surface-200",
+                      option.disabled && "opacity-50 cursor-not-allowed"
                     )
                   }
                 >
@@ -91,8 +97,8 @@ const Select: React.FC<SelectProps> = ({
                     <>
                       <span
                         className={classNames(
-                          'block truncate',
-                          selected && 'font-medium'
+                          "block truncate",
+                          selected && "font-medium"
                         )}
                       >
                         {option.label}
@@ -116,5 +122,3 @@ const Select: React.FC<SelectProps> = ({
 };
 
 export default Select;
-
-

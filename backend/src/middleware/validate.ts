@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import { AnySchema, ValidationError as YupValidationError } from 'yup';
-import { ValidationError } from '../utils/errors';
+import { Request, Response, NextFunction } from "express";
+import { AnySchema, ValidationError as YupValidationError } from "yup";
+import { ValidationError } from "../utils/errors";
 
 interface ValidateOptions {
   body?: AnySchema;
@@ -9,7 +9,11 @@ interface ValidateOptions {
 }
 
 export const validate = (schemas: ValidateOptions) => {
-  return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
+  return async (
+    req: Request,
+    _res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     try {
       const errors: Record<string, string[]> = {};
 
@@ -22,7 +26,7 @@ export const validate = (schemas: ValidateOptions) => {
         } catch (err) {
           if (err instanceof YupValidationError) {
             err.inner.forEach((e) => {
-              const path = e.path || 'body';
+              const path = e.path || "body";
               if (!errors[path]) {
                 errors[path] = [];
               }
@@ -43,7 +47,7 @@ export const validate = (schemas: ValidateOptions) => {
         } catch (err) {
           if (err instanceof YupValidationError) {
             err.inner.forEach((e) => {
-              const path = e.path ? `query.${e.path}` : 'query';
+              const path = e.path ? `query.${e.path}` : "query";
               if (!errors[path]) {
                 errors[path] = [];
               }
@@ -64,7 +68,7 @@ export const validate = (schemas: ValidateOptions) => {
         } catch (err) {
           if (err instanceof YupValidationError) {
             err.inner.forEach((e) => {
-              const path = e.path ? `params.${e.path}` : 'params';
+              const path = e.path ? `params.${e.path}` : "params";
               if (!errors[path]) {
                 errors[path] = [];
               }
@@ -77,7 +81,7 @@ export const validate = (schemas: ValidateOptions) => {
       }
 
       if (Object.keys(errors).length > 0) {
-        throw new ValidationError('Validation failed', errors);
+        throw new ValidationError("Validation failed", errors);
       }
 
       next();
@@ -86,5 +90,3 @@ export const validate = (schemas: ValidateOptions) => {
     }
   };
 };
-
-

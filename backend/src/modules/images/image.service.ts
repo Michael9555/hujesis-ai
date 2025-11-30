@@ -1,11 +1,15 @@
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
-import { AppDataSource } from '../../config/database';
-import { GeneratedImage, ImageStatus } from './image.entity';
-import promptService from '../prompts/prompt.service';
-import { NotFoundError, ForbiddenError } from '../../utils/errors';
-import { GenerateImageInput, UpdateImageInput, ImageQueryInput } from './image.schema';
-import logger from '../../utils/logger';
+import { Repository, FindOptionsWhere } from "typeorm";
+import { v4 as uuidv4 } from "uuid";
+import { AppDataSource } from "../../config/database";
+import { GeneratedImage, ImageStatus } from "./image.entity";
+import promptService from "../prompts/prompt.service";
+import { NotFoundError, ForbiddenError } from "../../utils/errors";
+import {
+  GenerateImageInput,
+  UpdateImageInput,
+  ImageQueryInput,
+} from "./image.schema";
+import logger from "../../utils/logger";
 
 interface PaginatedResult<T> {
   data: T[];
@@ -17,11 +21,11 @@ interface PaginatedResult<T> {
 
 // Mock image URLs for demo purposes
 const MOCK_IMAGES = [
-  'https://picsum.photos/seed/img1/512/512',
-  'https://picsum.photos/seed/img2/512/512',
-  'https://picsum.photos/seed/img3/512/512',
-  'https://picsum.photos/seed/img4/512/512',
-  'https://picsum.photos/seed/img5/512/512',
+  "https://picsum.photos/seed/img1/512/512",
+  "https://picsum.photos/seed/img2/512/512",
+  "https://picsum.photos/seed/img3/512/512",
+  "https://picsum.photos/seed/img4/512/512",
+  "https://picsum.photos/seed/img5/512/512",
 ];
 
 export class ImageService {
@@ -31,7 +35,10 @@ export class ImageService {
     this.imageRepository = AppDataSource.getRepository(GeneratedImage);
   }
 
-  async generate(userId: string, input: GenerateImageInput): Promise<GeneratedImage> {
+  async generate(
+    userId: string,
+    input: GenerateImageInput
+  ): Promise<GeneratedImage> {
     const startTime = Date.now();
 
     // Create image record with pending status
@@ -46,7 +53,7 @@ export class ImageService {
         height: input.settings?.height || 512,
         steps: input.settings?.steps || 30,
         cfgScale: input.settings?.cfgScale || 7,
-        sampler: input.settings?.sampler || 'Euler a',
+        sampler: input.settings?.sampler || "Euler a",
         seed: input.settings?.seed || Math.floor(Math.random() * 2147483647),
         model: input.settings?.model,
       },
@@ -59,15 +66,18 @@ export class ImageService {
       await this.mockImageGeneration();
 
       // Update with mock result
-      const seed = image.generationSettings?.seed || Math.floor(Math.random() * 1000);
-      const mockUrl = `https://picsum.photos/seed/${seed}/${image.generationSettings?.width || 512}/${image.generationSettings?.height || 512}`;
+      const seed =
+        image.generationSettings?.seed || Math.floor(Math.random() * 1000);
+      const mockUrl = `https://picsum.photos/seed/${seed}/${
+        image.generationSettings?.width || 512
+      }/${image.generationSettings?.height || 512}`;
 
       image.imageUrl = mockUrl;
       image.thumbnailUrl = `https://picsum.photos/seed/${seed}/256/256`;
       image.width = image.generationSettings?.width || 512;
       image.height = image.generationSettings?.height || 512;
       image.fileSize = Math.floor(Math.random() * 500000) + 100000;
-      image.mimeType = 'image/jpeg';
+      image.mimeType = "image/jpeg";
       image.status = ImageStatus.COMPLETED;
       image.generationTimeMs = Date.now() - startTime;
 
@@ -81,7 +91,8 @@ export class ImageService {
       logger.info(`Image generated: ${image.id} for user ${userId}`);
     } catch (error) {
       image.status = ImageStatus.FAILED;
-      image.errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      image.errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       await this.imageRepository.save(image);
       throw error;
     }
@@ -99,7 +110,8 @@ export class ImageService {
     userId: string,
     query: ImageQueryInput
   ): Promise<PaginatedResult<GeneratedImage>> {
-    const { page, limit, promptId, status, isFavorite, sortBy, sortOrder } = query;
+    const { page, limit, promptId, status, isFavorite, sortBy, sortOrder } =
+      query;
     const skip = (page - 1) * limit;
 
     const where: FindOptionsWhere<GeneratedImage> = { userId };
@@ -109,7 +121,7 @@ export class ImageService {
     }
 
     if (status) {
-      where.status = status as GeneratedImage['status'];
+      where.status = status as GeneratedImage["status"];
     }
 
     if (isFavorite !== undefined) {
@@ -121,7 +133,7 @@ export class ImageService {
       order: { [sortBy]: sortOrder },
       skip,
       take: limit,
-      relations: ['prompt'],
+      relations: ["prompt"],
     });
 
     return {
@@ -136,15 +148,15 @@ export class ImageService {
   async findById(imageId: string, userId?: string): Promise<GeneratedImage> {
     const image = await this.imageRepository.findOne({
       where: { id: imageId },
-      relations: ['prompt'],
+      relations: ["prompt"],
     });
 
     if (!image) {
-      throw new NotFoundError('Image not found');
+      throw new NotFoundError("Image not found");
     }
 
     if (userId && image.userId !== userId) {
-      throw new ForbiddenError('You do not have access to this image');
+      throw new ForbiddenError("You do not have access to this image");
     }
 
     return image;
@@ -176,7 +188,10 @@ export class ImageService {
     logger.info(`Image deleted: ${imageId}`);
   }
 
-  async toggleFavorite(imageId: string, userId: string): Promise<GeneratedImage> {
+  async toggleFavorite(
+    imageId: string,
+    userId: string
+  ): Promise<GeneratedImage> {
     const image = await this.findById(imageId, userId);
     image.isFavorite = !image.isFavorite;
     await this.imageRepository.save(image);
@@ -223,10 +238,10 @@ export class ImageService {
     });
 
     const result = await this.imageRepository
-      .createQueryBuilder('image')
-      .select('SUM(image.generationTimeMs)', 'total')
-      .where('image.userId = :userId', { userId })
-      .andWhere('image.status = :status', { status: ImageStatus.COMPLETED })
+      .createQueryBuilder("image")
+      .select("SUM(image.generationTimeMs)", "total")
+      .where("image.userId = :userId", { userId })
+      .andWhere("image.status = :status", { status: ImageStatus.COMPLETED })
       .getRawOne();
 
     return {
@@ -234,11 +249,9 @@ export class ImageService {
       completedCount,
       failedCount,
       favoriteCount,
-      totalGenerationTime: parseInt(result?.total || '0', 10),
+      totalGenerationTime: parseInt(result?.total || "0", 10),
     };
   }
 }
 
 export default new ImageService();
-
-

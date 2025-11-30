@@ -1,19 +1,19 @@
-import jwt from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
-import { addDays, addHours } from 'date-fns';
-import { Repository } from 'typeorm';
-import { AppDataSource } from '../../config/database';
-import { config } from '../../config';
-import { User, UserRole } from '../users/user.entity';
-import { RefreshToken } from './refresh-token.entity';
+import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
+import { addDays, addHours } from "date-fns";
+import { Repository } from "typeorm";
+import { AppDataSource } from "../../config/database";
+import { config } from "../../config";
+import { User, UserRole } from "../users/user.entity";
+import { RefreshToken } from "./refresh-token.entity";
 import {
   UnauthorizedError,
   ConflictError,
   BadRequestError,
-} from '../../utils/errors';
-import { JwtPayload } from '../../middleware/auth';
-import { RegisterInput, LoginInput } from './auth.schema';
-import logger from '../../utils/logger';
+} from "../../utils/errors";
+import { JwtPayload } from "../../middleware/auth";
+import { RegisterInput, LoginInput } from "./auth.schema";
+import logger from "../../utils/logger";
 
 interface TokenPair {
   accessToken: string;
@@ -41,7 +41,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new ConflictError('User with this email already exists');
+      throw new ConflictError("User with this email already exists");
     }
 
     const user = this.userRepository.create({
@@ -74,17 +74,17 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedError('Invalid email or password');
+      throw new UnauthorizedError("Invalid email or password");
     }
 
     if (!user.isActive) {
-      throw new UnauthorizedError('Account is deactivated');
+      throw new UnauthorizedError("Account is deactivated");
     }
 
     const isPasswordValid = await user.comparePassword(input.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedError('Invalid email or password');
+      throw new UnauthorizedError("Invalid email or password");
     }
 
     // Update last login
@@ -108,21 +108,21 @@ export class AuthService {
   ): Promise<TokenPair> {
     const storedToken = await this.refreshTokenRepository.findOne({
       where: { token: refreshToken },
-      relations: ['user'],
+      relations: ["user"],
     });
 
     if (!storedToken) {
-      throw new UnauthorizedError('Invalid refresh token');
+      throw new UnauthorizedError("Invalid refresh token");
     }
 
     if (!storedToken.isValid) {
       // Revoke all tokens for this user if token is invalid (potential theft)
       await this.revokeAllUserTokens(storedToken.userId);
-      throw new UnauthorizedError('Refresh token is expired or revoked');
+      throw new UnauthorizedError("Refresh token is expired or revoked");
     }
 
     if (!storedToken.user.isActive) {
-      throw new UnauthorizedError('Account is deactivated');
+      throw new UnauthorizedError("Account is deactivated");
     }
 
     // Revoke the used refresh token (rotation)
@@ -159,13 +159,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new BadRequestError('User not found');
+      throw new BadRequestError("User not found");
     }
 
     const isPasswordValid = await user.comparePassword(currentPassword);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedError('Current password is incorrect');
+      throw new UnauthorizedError("Current password is incorrect");
     }
 
     user.password = newPassword;
@@ -230,13 +230,13 @@ export class AuthService {
     const unit = match[2];
 
     switch (unit) {
-      case 'd':
+      case "d":
         return value * 24 * 60 * 60;
-      case 'h':
+      case "h":
         return value * 60 * 60;
-      case 'm':
+      case "m":
         return value * 60;
-      case 's':
+      case "s":
         return value;
       default:
         return 3600;
@@ -248,8 +248,8 @@ export class AuthService {
     const result = await this.refreshTokenRepository
       .createQueryBuilder()
       .delete()
-      .where('expiresAt < :now', { now: new Date() })
-      .orWhere('isRevoked = :revoked', { revoked: true })
+      .where("expiresAt < :now", { now: new Date() })
+      .orWhere("isRevoked = :revoked", { revoked: true })
       .execute();
 
     return result.affected || 0;
@@ -257,5 +257,3 @@ export class AuthService {
 }
 
 export default new AuthService();
-
-

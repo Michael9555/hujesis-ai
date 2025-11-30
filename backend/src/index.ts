@@ -1,14 +1,14 @@
-import 'reflect-metadata';
-import { createApp } from './app';
-import { initializeDatabase } from './config/database';
-import { config } from './config';
-import logger from './utils/logger';
+import "reflect-metadata";
+import { createApp } from "./app";
+import { initializeDatabase } from "./config/database";
+import { config } from "./config";
+import logger from "./utils/logger";
 
 const startServer = async (): Promise<void> => {
   try {
     // Initialize database connection
     await initializeDatabase();
-    logger.info('Database initialized successfully');
+    logger.info("Database initialized successfully");
 
     // Create Express app
     const app = createApp();
@@ -31,35 +31,33 @@ const startServer = async (): Promise<void> => {
       logger.info(`${signal} received. Starting graceful shutdown...`);
 
       server.close(() => {
-        logger.info('HTTP server closed');
+        logger.info("HTTP server closed");
         process.exit(0);
       });
 
       // Force close after 10 seconds
       setTimeout(() => {
-        logger.error('Forced shutdown after timeout');
+        logger.error("Forced shutdown after timeout");
         process.exit(1);
       }, 10000);
     };
 
-    process.on('SIGTERM', () => shutdown('SIGTERM'));
-    process.on('SIGINT', () => shutdown('SIGINT'));
+    process.on("SIGTERM", () => shutdown("SIGTERM"));
+    process.on("SIGINT", () => shutdown("SIGINT"));
 
     // Unhandled rejection handling
-    process.on('unhandledRejection', (reason: Error) => {
-      logger.error('Unhandled Rejection:', reason);
+    process.on("unhandledRejection", (reason: Error) => {
+      logger.error("Unhandled Rejection:", reason);
     });
 
-    process.on('uncaughtException', (error: Error) => {
-      logger.error('Uncaught Exception:', error);
+    process.on("uncaughtException", (error: Error) => {
+      logger.error("Uncaught Exception:", error);
       process.exit(1);
     });
   } catch (error) {
-    logger.error('Failed to start server:', error);
+    logger.error("Failed to start server:", error);
     process.exit(1);
   }
 };
 
 startServer();
-
-

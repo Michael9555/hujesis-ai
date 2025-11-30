@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { forwardRef, InputHTMLAttributes } from 'react';
-import classNames from 'classnames';
-import { WarningCircle } from '@phosphor-icons/react';
+import React, { forwardRef, InputHTMLAttributes } from "react";
+import classNames from "classnames";
+import { WarningCircle } from "@phosphor-icons/react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -31,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || props.name;
 
     return (
-      <div className={classNames('w-full', containerClassName)}>
+      <div className={classNames("w-full", containerClassName)}>
         {label && (
           <label
             htmlFor={inputId}
@@ -50,13 +50,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={classNames(
-              'w-full px-4 py-3 bg-surface-900/50 border rounded-xl text-surface-100 placeholder-surface-500 transition-all duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-offset-0',
+              "w-full px-4 py-3 bg-surface-900/50 border rounded-xl text-surface-100 placeholder-surface-500 transition-all duration-200",
+              "focus:outline-none focus:ring-2 focus:ring-offset-0",
               error
-                ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
-                : 'border-surface-700 focus:border-primary-500 focus:ring-primary-500/20',
-              leftIcon && 'pl-10',
-              rightIcon && 'pr-10',
+                ? "border-danger-500 focus:border-danger-500 focus:ring-danger-500/20"
+                : "border-surface-700 focus:border-primary-500 focus:ring-primary-500/20",
+              leftIcon && "pl-10",
+              rightIcon && "pr-10",
               className
             )}
             {...props}
@@ -85,8 +85,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export default Input;
-
-

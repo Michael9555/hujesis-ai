@@ -1,8 +1,15 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { User, LoginInput, RegisterInput, ApiError } from '@/types';
-import api from '@/services/api';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from "react";
+import { User, LoginInput, RegisterInput, ApiError } from "@/types";
+import api from "@/services/api";
 
 interface AuthContextType {
   user: User | null;
@@ -41,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(response.data.user);
     } catch (err) {
       const apiError = err as ApiError;
-      setError(apiError.error?.message || 'Login failed');
+      setError(apiError.error?.message || "Login failed");
       throw err;
     }
   }, []);
@@ -53,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(response.data.user);
     } catch (err) {
       const apiError = err as ApiError;
-      setError(apiError.error?.message || 'Registration failed');
+      setError(apiError.error?.message || "Registration failed");
       throw err;
     }
   }, []);
@@ -69,8 +76,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Check auth status on mount
   useEffect(() => {
     const checkAuth = async () => {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-      
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("accessToken")
+          : null;
+
       if (token) {
         try {
           await refreshUser();
@@ -78,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           api.clearTokens();
         }
       }
-      
+
       setIsLoading(false);
     };
 
@@ -103,11 +113,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
 
 export default AuthContext;
-
-

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Article,
   Images,
@@ -11,11 +11,11 @@ import {
   Plus,
   Clock,
   Lightning,
-} from '@phosphor-icons/react';
-import { useAuth } from '@/context/AuthContext';
-import { Button, Card, Spinner } from '@/components/ui';
-import api from '@/services/api';
-import { DashboardStats, Prompt, GeneratedImage } from '@/types';
+} from "@phosphor-icons/react";
+import { useAuth } from "@/context/AuthContext";
+import { Button, Card, Spinner } from "@/components/ui";
+import api from "@/services/api";
+import { DashboardStats, Prompt, GeneratedImage } from "@/types";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/login');
+      router.push("/login");
     }
   }, [isAuthenticated, authLoading, router]);
 
@@ -36,15 +36,15 @@ export default function DashboardPage() {
       try {
         const [dashboardRes, promptsRes, imagesRes] = await Promise.all([
           api.getDashboard(),
-          api.getPrompts({ limit: 5, sortBy: 'createdAt', sortOrder: 'DESC' }),
-          api.getImages({ limit: 6, sortBy: 'createdAt', sortOrder: 'DESC' }),
+          api.getPrompts({ limit: 5, sortBy: "createdAt", sortOrder: "DESC" }),
+          api.getImages({ limit: 6, sortBy: "createdAt", sortOrder: "DESC" }),
         ]);
 
         setStats(dashboardRes.data);
         setRecentPrompts(promptsRes.data);
         setRecentImages(imagesRes.data);
       } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
+        console.error("Failed to fetch dashboard data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -61,32 +61,32 @@ export default function DashboardPage() {
 
   const statCards = [
     {
-      label: 'Total Prompts',
+      label: "Total Prompts",
       value: stats?.promptCount || 0,
       icon: Article,
-      color: 'primary',
-      href: '/prompts',
+      color: "primary",
+      href: "/prompts",
     },
     {
-      label: 'Generated Images',
+      label: "Generated Images",
       value: stats?.imageCount || 0,
       icon: Images,
-      color: 'accent',
-      href: '/gallery',
+      color: "accent",
+      href: "/gallery",
     },
     {
-      label: 'Favorite Prompts',
+      label: "Favorite Prompts",
       value: stats?.favoritePromptsCount || 0,
       icon: Star,
-      color: 'warning',
-      href: '/prompts?isFavorite=true',
+      color: "warning",
+      href: "/prompts?isFavorite=true",
     },
     {
-      label: 'Favorite Images',
+      label: "Favorite Images",
       value: stats?.favoriteImagesCount || 0,
       icon: Star,
-      color: 'success',
-      href: '/gallery?isFavorite=true',
+      color: "success",
+      href: "/gallery?isFavorite=true",
     },
   ];
 
@@ -125,24 +125,24 @@ export default function DashboardPage() {
                     <div className="flex items-center gap-4">
                       <div
                         className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                          stat.color === 'primary'
-                            ? 'bg-primary-500/10'
-                            : stat.color === 'accent'
-                            ? 'bg-accent-500/10'
-                            : stat.color === 'warning'
-                            ? 'bg-warning-500/10'
-                            : 'bg-success-500/10'
+                          stat.color === "primary"
+                            ? "bg-primary-500/10"
+                            : stat.color === "accent"
+                            ? "bg-accent-500/10"
+                            : stat.color === "warning"
+                            ? "bg-warning-500/10"
+                            : "bg-success-500/10"
                         }`}
                       >
                         <Icon
                           className={`w-6 h-6 ${
-                            stat.color === 'primary'
-                              ? 'text-primary-400'
-                              : stat.color === 'accent'
-                              ? 'text-accent-400'
-                              : stat.color === 'warning'
-                              ? 'text-warning-400'
-                              : 'text-success-400'
+                            stat.color === "primary"
+                              ? "text-primary-400"
+                              : stat.color === "accent"
+                              ? "text-accent-400"
+                              : stat.color === "warning"
+                              ? "text-warning-400"
+                              : "text-success-400"
                           }`}
                           weight="duotone"
                         />
@@ -254,7 +254,9 @@ export default function DashboardPage() {
               ) : (
                 <div className="text-center py-8">
                   <Images className="w-12 h-12 text-surface-600 mx-auto mb-3" />
-                  <p className="text-surface-400 mb-4">No images generated yet</p>
+                  <p className="text-surface-400 mb-4">
+                    No images generated yet
+                  </p>
                   <Link href="/generate">
                     <Button variant="secondary" size="sm">
                       Generate your first image
@@ -269,5 +271,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-

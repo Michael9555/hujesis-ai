@@ -5,7 +5,7 @@ export interface User {
   firstName: string;
   lastName: string;
   avatarUrl?: string;
-  role: 'user' | 'admin';
+  role: "user" | "admin";
   isActive: boolean;
   isEmailVerified: boolean;
   lastLoginAt?: string;
@@ -39,17 +39,17 @@ export interface RegisterInput {
 
 // Prompt types
 export type PromptCategory =
-  | 'portrait'
-  | 'landscape'
-  | 'abstract'
-  | 'fantasy'
-  | 'scifi'
-  | 'anime'
-  | 'realistic'
-  | 'artistic'
-  | 'other';
+  | "portrait"
+  | "landscape"
+  | "abstract"
+  | "fantasy"
+  | "scifi"
+  | "anime"
+  | "realistic"
+  | "artistic"
+  | "other";
 
-export type PromptStatus = 'draft' | 'active' | 'archived';
+export type PromptStatus = "draft" | "active" | "archived";
 
 export interface PromptSettings {
   width?: number;
@@ -93,7 +93,7 @@ export interface UpdatePromptInput extends Partial<CreatePromptInput> {
 }
 
 // Image types
-export type ImageStatus = 'pending' | 'processing' | 'completed' | 'failed';
+export type ImageStatus = "pending" | "processing" | "completed" | "failed";
 
 export interface GenerationSettings {
   width: number;
@@ -172,21 +172,21 @@ export interface PromptQueryParams {
   page?: number;
   limit?: number;
   search?: string;
-  category?: PromptCategory | '';
-  status?: PromptStatus | '';
+  category?: PromptCategory | "";
+  status?: PromptStatus | "";
   isFavorite?: boolean;
-  sortBy?: 'createdAt' | 'updatedAt' | 'title' | 'usageCount';
-  sortOrder?: 'ASC' | 'DESC';
+  sortBy?: "createdAt" | "updatedAt" | "title" | "usageCount";
+  sortOrder?: "ASC" | "DESC";
 }
 
 export interface ImageQueryParams {
   page?: number;
   limit?: number;
   promptId?: string;
-  status?: ImageStatus | '';
+  status?: ImageStatus | "";
   isFavorite?: boolean;
-  sortBy?: 'createdAt' | 'fileSize';
-  sortOrder?: 'ASC' | 'DESC';
+  sortBy?: "createdAt" | "fileSize";
+  sortOrder?: "ASC" | "DESC";
 }
 
 // Stats types
@@ -211,5 +211,3 @@ export interface DashboardStats {
   favoritePromptsCount: number;
   favoriteImagesCount: number;
 }
-
-

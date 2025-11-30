@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import classNames from 'classnames';
+import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import classNames from "classnames";
 import {
   House,
   Article,
@@ -13,7 +13,7 @@ import {
   Folder,
   Gear,
   X,
-} from '@phosphor-icons/react';
+} from "@phosphor-icons/react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -24,19 +24,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
 
   const mainLinks = [
-    { href: '/dashboard', label: 'Dashboard', icon: House },
-    { href: '/generate', label: 'Generate', icon: Plus },
-    { href: '/prompts', label: 'My Prompts', icon: Article },
-    { href: '/gallery', label: 'Gallery', icon: Images },
+    { href: "/dashboard", label: "Dashboard", icon: House },
+    { href: "/generate", label: "Generate", icon: Plus },
+    { href: "/prompts", label: "My Prompts", icon: Article },
+    { href: "/gallery", label: "Gallery", icon: Images },
   ];
 
   const secondaryLinks = [
-    { href: '/prompts?isFavorite=true', label: 'Favorites', icon: Star },
-    { href: '/prompts?status=archived', label: 'Archived', icon: Folder },
+    { href: "/prompts?isFavorite=true", label: "Favorites", icon: Star },
+    { href: "/prompts?status=archived", label: "Archived", icon: Folder },
   ];
 
   const isActive = (href: string) => {
-    if (href.includes('?')) {
+    if (href.includes("?")) {
       return pathname + window.location.search === href;
     }
     return pathname === href;
@@ -55,8 +55,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <aside
         className={classNames(
-          'fixed top-16 left-0 bottom-0 w-64 bg-surface-900/50 backdrop-blur-xl border-r border-surface-800 z-40 transform transition-transform duration-300 lg:translate-x-0',
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          "fixed top-16 left-0 bottom-0 w-64 bg-surface-900/50 backdrop-blur-xl border-r border-surface-800 z-40 transform transition-transform duration-300 lg:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
@@ -85,15 +85,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     href={link.href}
                     onClick={onClose}
                     className={classNames(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                       active
-                        ? 'bg-primary-500/10 text-primary-400 shadow-sm'
-                        : 'text-surface-400 hover:text-surface-100 hover:bg-surface-800'
+                        ? "bg-primary-500/10 text-primary-400 shadow-sm"
+                        : "text-surface-400 hover:text-surface-100 hover:bg-surface-800"
                     )}
                   >
                     <Icon
                       className="w-5 h-5"
-                      weight={active ? 'fill' : 'regular'}
+                      weight={active ? "fill" : "regular"}
                     />
                     {link.label}
                   </Link>
@@ -114,15 +114,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     href={link.href}
                     onClick={onClose}
                     className={classNames(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                       active
-                        ? 'bg-primary-500/10 text-primary-400'
-                        : 'text-surface-400 hover:text-surface-100 hover:bg-surface-800'
+                        ? "bg-primary-500/10 text-primary-400"
+                        : "text-surface-400 hover:text-surface-100 hover:bg-surface-800"
                     )}
                   >
                     <Icon
                       className="w-5 h-5"
-                      weight={active ? 'fill' : 'regular'}
+                      weight={active ? "fill" : "regular"}
                     />
                     {link.label}
                   </Link>
@@ -137,10 +137,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               href="/settings"
               onClick={onClose}
               className={classNames(
-                'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
-                pathname === '/settings'
-                  ? 'bg-primary-500/10 text-primary-400'
-                  : 'text-surface-400 hover:text-surface-100 hover:bg-surface-800'
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                pathname === "/settings"
+                  ? "bg-primary-500/10 text-primary-400"
+                  : "text-surface-400 hover:text-surface-100 hover:bg-surface-800"
               )}
             >
               <Gear className="w-5 h-5" />
@@ -154,5 +154,3 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 };
 
 export default Sidebar;
-
-

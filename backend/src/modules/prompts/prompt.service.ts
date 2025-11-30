@@ -1,9 +1,13 @@
-import { Repository, Like, FindOptionsWhere } from 'typeorm';
-import { AppDataSource } from '../../config/database';
-import { Prompt, PromptStatus } from './prompt.entity';
-import { NotFoundError, ForbiddenError } from '../../utils/errors';
-import { CreatePromptInput, UpdatePromptInput, PromptQueryInput } from './prompt.schema';
-import logger from '../../utils/logger';
+import { Repository, Like, FindOptionsWhere } from "typeorm";
+import { AppDataSource } from "../../config/database";
+import { Prompt, PromptStatus } from "./prompt.entity";
+import { NotFoundError, ForbiddenError } from "../../utils/errors";
+import {
+  CreatePromptInput,
+  UpdatePromptInput,
+  PromptQueryInput,
+} from "./prompt.schema";
+import logger from "../../utils/logger";
 
 interface PaginatedResult<T> {
   data: T[];
@@ -37,17 +41,26 @@ export class PromptService {
     userId: string,
     query: PromptQueryInput
   ): Promise<PaginatedResult<Prompt>> {
-    const { page, limit, search, category, status, isFavorite, sortBy, sortOrder } = query;
+    const {
+      page,
+      limit,
+      search,
+      category,
+      status,
+      isFavorite,
+      sortBy,
+      sortOrder,
+    } = query;
     const skip = (page - 1) * limit;
 
     const where: FindOptionsWhere<Prompt> = { userId };
 
     if (category) {
-      where.category = category as Prompt['category'];
+      where.category = category as Prompt["category"];
     }
 
     if (status) {
-      where.status = status as Prompt['status'];
+      where.status = status as Prompt["status"];
     } else {
       // By default, don't show archived prompts
       where.status = PromptStatus.ACTIVE;
@@ -58,18 +71,18 @@ export class PromptService {
     }
 
     const queryBuilder = this.promptRepository
-      .createQueryBuilder('prompt')
+      .createQueryBuilder("prompt")
       .where(where);
 
     if (search) {
       queryBuilder.andWhere(
-        '(prompt.title ILIKE :search OR prompt.content ILIKE :search OR prompt.description ILIKE :search)',
+        "(prompt.title ILIKE :search OR prompt.content ILIKE :search OR prompt.description ILIKE :search)",
         { search: `%${search}%` }
       );
     }
 
     queryBuilder
-      .orderBy(`prompt.${sortBy}`, sortOrder as 'ASC' | 'DESC')
+      .orderBy(`prompt.${sortBy}`, sortOrder as "ASC" | "DESC")
       .skip(skip)
       .take(limit);
 
@@ -87,15 +100,15 @@ export class PromptService {
   async findById(promptId: string, userId?: string): Promise<Prompt> {
     const prompt = await this.promptRepository.findOne({
       where: { id: promptId },
-      relations: ['generatedImages'],
+      relations: ["generatedImages"],
     });
 
     if (!prompt) {
-      throw new NotFoundError('Prompt not found');
+      throw new NotFoundError("Prompt not found");
     }
 
     if (userId && prompt.userId !== userId) {
-      throw new ForbiddenError('You do not have access to this prompt');
+      throw new ForbiddenError("You do not have access to this prompt");
     }
 
     return prompt;
@@ -133,7 +146,7 @@ export class PromptService {
   }
 
   async incrementUsageCount(promptId: string): Promise<void> {
-    await this.promptRepository.increment({ id: promptId }, 'usageCount', 1);
+    await this.promptRepository.increment({ id: promptId }, "usageCount", 1);
   }
 
   async archive(promptId: string, userId: string): Promise<Prompt> {
@@ -172,10 +185,10 @@ export class PromptService {
 
   async getCategories(): Promise<{ category: string; count: number }[]> {
     const result = await this.promptRepository
-      .createQueryBuilder('prompt')
-      .select('prompt.category', 'category')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('prompt.category')
+      .createQueryBuilder("prompt")
+      .select("prompt.category", "category")
+      .addSelect("COUNT(*)", "count")
+      .groupBy("prompt.category")
       .getRawMany();
 
     return result;
@@ -195,12 +208,12 @@ export class PromptService {
     });
 
     const categoryResults = await this.promptRepository
-      .createQueryBuilder('prompt')
-      .select('prompt.category', 'category')
-      .addSelect('COUNT(*)', 'count')
-      .where('prompt.userId = :userId', { userId })
-      .andWhere('prompt.status = :status', { status: PromptStatus.ACTIVE })
-      .groupBy('prompt.category')
+      .createQueryBuilder("prompt")
+      .select("prompt.category", "category")
+      .addSelect("COUNT(*)", "count")
+      .where("prompt.userId = :userId", { userId })
+      .andWhere("prompt.status = :status", { status: PromptStatus.ACTIVE })
+      .groupBy("prompt.category")
       .getRawMany();
 
     const categoryCounts: Record<string, number> = {};
@@ -213,5 +226,3 @@ export class PromptService {
 }
 
 export default new PromptService();
-
-

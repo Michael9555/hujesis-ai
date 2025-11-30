@@ -7,56 +7,56 @@ import {
   OneToMany,
   BeforeInsert,
   BeforeUpdate,
-} from 'typeorm';
-import bcrypt from 'bcryptjs';
-import { Prompt } from '../prompts/prompt.entity';
-import { GeneratedImage } from '../images/image.entity';
+} from "typeorm";
+import bcrypt from "bcryptjs";
+import { Prompt } from "../prompts/prompt.entity";
+import { GeneratedImage } from "../images/image.entity";
 
 export enum UserRole {
-  USER = 'user',
-  ADMIN = 'admin',
+  USER = "user",
+  ADMIN = "admin",
 }
 
-@Entity('users')
+@Entity("users")
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: "varchar", length: 255, unique: true })
   email!: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: "varchar", length: 255 })
   password!: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: "varchar", length: 100 })
   firstName!: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: "varchar", length: 100 })
   lastName!: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: "varchar", length: 255, nullable: true })
   avatarUrl?: string;
 
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: UserRole,
     default: UserRole.USER,
   })
   role!: UserRole;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: "boolean", default: true })
   isActive!: boolean;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: "boolean", default: false })
   isEmailVerified!: boolean;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: "timestamp", nullable: true })
   lastLoginAt?: Date;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: "timestamp" })
   createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: "timestamp" })
   updatedAt!: Date;
 
   @OneToMany(() => Prompt, (prompt) => prompt.user)
@@ -69,7 +69,7 @@ export class User {
   @BeforeUpdate()
   async hashPassword(): Promise<void> {
     // Only hash if password is modified
-    if (this.password && !this.password.startsWith('$2a$')) {
+    if (this.password && !this.password.startsWith("$2a$")) {
       const salt = await bcrypt.genSalt(10);
       this.password = await bcrypt.hash(this.password, salt);
     }
@@ -88,5 +88,3 @@ export class User {
     return userWithoutPassword;
   }
 }
-
-

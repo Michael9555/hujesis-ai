@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response } from "express";
 
 interface SuccessResponse<T> {
   success: true;
@@ -26,7 +26,7 @@ export const sendSuccess = <T>(
   data: T,
   statusCode: number = 200,
   message?: string,
-  meta?: SuccessResponse<T>['meta']
+  meta?: SuccessResponse<T>["meta"]
 ): Response => {
   const response: SuccessResponse<T> = {
     success: true,
@@ -74,5 +74,3 @@ export const sendPaginated = <T>(
     totalPages,
   });
 };
-
-

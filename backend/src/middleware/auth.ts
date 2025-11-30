@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { config } from '../config';
-import { UnauthorizedError, ForbiddenError } from '../utils/errors';
-import { AppDataSource } from '../config/database';
-import { User } from '../modules/users/user.entity';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { config } from "../config";
+import { UnauthorizedError, ForbiddenError } from "../utils/errors";
+import { AppDataSource } from "../config/database";
+import { User } from "../modules/users/user.entity";
 
 export interface JwtPayload {
   userId: string;
@@ -24,14 +24,14 @@ export const authenticate = async (
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedError('No authentication token provided');
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      throw new UnauthorizedError("No authentication token provided");
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ")[1];
 
     if (!token) {
-      throw new UnauthorizedError('Invalid authentication token format');
+      throw new UnauthorizedError("Invalid authentication token format");
     }
 
     const decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
@@ -42,7 +42,7 @@ export const authenticate = async (
     });
 
     if (!user) {
-      throw new UnauthorizedError('User not found or inactive');
+      throw new UnauthorizedError("User not found or inactive");
     }
 
     req.user = user;
@@ -62,11 +62,11 @@ export const optionalAuth = async (
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return next();
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ")[1];
 
     if (!token) {
       return next();
@@ -95,17 +95,19 @@ export const optionalAuth = async (
 };
 
 export const authorize = (...roles: string[]) => {
-  return (req: AuthenticatedRequest, _res: Response, next: NextFunction): void => {
+  return (
+    req: AuthenticatedRequest,
+    _res: Response,
+    next: NextFunction
+  ): void => {
     if (!req.user) {
-      return next(new UnauthorizedError('Authentication required'));
+      return next(new UnauthorizedError("Authentication required"));
     }
 
     if (roles.length > 0 && !roles.includes(req.user.role)) {
-      return next(new ForbiddenError('Insufficient permissions'));
+      return next(new ForbiddenError("Insufficient permissions"));
     }
 
     next();
   };
 };
-
-

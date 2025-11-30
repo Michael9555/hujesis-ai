@@ -1,9 +1,9 @@
-import { Repository } from 'typeorm';
-import { AppDataSource } from '../../config/database';
-import { User } from './user.entity';
-import { NotFoundError } from '../../utils/errors';
-import { UpdateProfileInput } from './user.schema';
-import logger from '../../utils/logger';
+import { Repository } from "typeorm";
+import { AppDataSource } from "../../config/database";
+import { User } from "./user.entity";
+import { NotFoundError } from "../../utils/errors";
+import { UpdateProfileInput } from "./user.schema";
+import logger from "../../utils/logger";
 
 export class UserService {
   private userRepository: Repository<User>;
@@ -18,7 +18,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundError('User not found');
+      throw new NotFoundError("User not found");
     }
 
     return user;
@@ -30,7 +30,10 @@ export class UserService {
     });
   }
 
-  async updateProfile(userId: string, input: UpdateProfileInput): Promise<User> {
+  async updateProfile(
+    userId: string,
+    input: UpdateProfileInput
+  ): Promise<User> {
     const user = await this.findById(userId);
 
     if (input.firstName !== undefined) {
@@ -80,19 +83,25 @@ export class UserService {
   }> {
     const user = await this.findById(userId);
 
-    const promptCount = await AppDataSource.getRepository('Prompt').count({
+    const promptCount = await AppDataSource.getRepository("Prompt").count({
       where: { userId },
     });
 
-    const imageCount = await AppDataSource.getRepository('GeneratedImage').count({
+    const imageCount = await AppDataSource.getRepository(
+      "GeneratedImage"
+    ).count({
       where: { userId },
     });
 
-    const favoritePromptsCount = await AppDataSource.getRepository('Prompt').count({
+    const favoritePromptsCount = await AppDataSource.getRepository(
+      "Prompt"
+    ).count({
       where: { userId, isFavorite: true },
     });
 
-    const favoriteImagesCount = await AppDataSource.getRepository('GeneratedImage').count({
+    const favoriteImagesCount = await AppDataSource.getRepository(
+      "GeneratedImage"
+    ).count({
       where: { userId, isFavorite: true },
     });
 
@@ -107,5 +116,3 @@ export class UserService {
 }
 
 export default new UserService();
-
-

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { EnvelopeSimple, Lock, Sparkle } from '@phosphor-icons/react';
-import { useAuth } from '@/context/AuthContext';
-import { Button, Input, Card } from '@/components/ui';
-import { loginSchema, LoginFormData } from '@/utils/validation';
+import React, { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { EnvelopeSimple, Lock, Sparkle } from "@phosphor-icons/react";
+import { useAuth } from "@/context/AuthContext";
+import { Button, Input, Card } from "@/components/ui";
+import { loginSchema, LoginFormData } from "@/utils/validation";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
-      router.push('/dashboard');
+      router.push("/dashboard");
     }
   }, [isAuthenticated, isLoading, router]);
 
@@ -35,7 +35,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       await login(data);
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch {
       // Error is handled by context
     }
@@ -76,7 +76,7 @@ export default function LoginPage() {
               placeholder="you@example.com"
               leftIcon={<EnvelopeSimple className="w-5 h-5" />}
               error={errors.email?.message}
-              {...register('email')}
+              {...register("email")}
             />
 
             <Input
@@ -85,7 +85,7 @@ export default function LoginPage() {
               placeholder="Enter your password"
               leftIcon={<Lock className="w-5 h-5" />}
               error={errors.password?.message}
-              {...register('password')}
+              {...register("password")}
             />
 
             <div className="flex items-center justify-between text-sm">
@@ -104,17 +104,13 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            <Button
-              type="submit"
-              fullWidth
-              isLoading={isSubmitting}
-            >
+            <Button type="submit" fullWidth isLoading={isSubmitting}>
               Sign in
             </Button>
           </form>
 
           <div className="mt-6 text-center text-sm text-surface-400">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
               className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
@@ -127,5 +123,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
